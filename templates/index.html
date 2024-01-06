@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Image to Text Converter</title>
+    <style>
+      body {
+        background-color: rgb(57, 53, 53);
+      }
+
+      .upload {
+        height: 300px;
+        max-width: 1500px;
+        background-color: white;
+        text-align: center;
+        border-radius: 10px;
+        font-family: "Poppins", serif;
+      }
+      .upload-container {
+        margin: 30px;
+      }
+      .upload h1 {
+        padding: 15px;
+        color: red;
+      }
+      .upload input[type="file"] {
+        padding: 10px;
+        margin: 10px 0;
+        font-size: 15px;
+        border: 2px solid #ccc;
+        border-radius: 5px;
+        background-color: white;
+        width: 80%;
+        max-width: 300px;
+        outline: none;
+      }
+      .upload button {
+        padding: 10px 20px;
+        margin-top: 10px;
+        font-size: 20px;
+        background-color: #0087f7;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .upload button:hover {
+        background-color: #0060c0;
+      }
+      .result {
+        height: auto;
+        max-width: 1500px;
+        background-color: white;
+        text-align: center;
+        border-radius: 10px;
+        margin: 30px;
+        padding: 12px;
+        text-align: justify;
+        font-family: "Poppins", sans-serif;
+        font-size: 15px;
+        font-weight: 700;
+      }
+      .result h2 {
+        color: red;
+      }
+      .translate-options {
+        display: flex;
+        align-items: center;
+      }
+
+      .translate-options select,
+      .translate-options button {
+        padding: 8px 15px;
+        font-size: 15px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #fff;
+        margin-left: 10px;
+      }
+
+      .translate-options button {
+        background-color: #0087f7;
+        color: white;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .translate-options button:hover {
+        background-color: #0060c0;
+      }
+
+      #footer {
+        position: fixed;
+        font-size: 20px;
+        text-align: center;
+        bottom: 0;
+        padding-bottom: 10px;
+        margin-left: -10px;
+        width: 100%;
+        height: 40px;
+        background: white;
+        font-weight: 600;
+      }
+      #footer a {
+        text-decoration: none;
+        color: black;
+      }
+      #footer a:hover {
+        text-decoration: underline;
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="upload-container">
+      <div class="upload">
+        <h1>Image to Text Converter</h1>
+        <form action="/convert" method="post" enctype="multipart/form-data">
+          <input
+            type="file"
+            name="file"
+            accept=".pdf, .jpg, .jpeg, .png"
+            required
+          /><br />
+          <button type="submit">Convert</button>
+        </form>
+      </div>
+    </div>
+    {% if text %}
+    <div class="result">
+      <h2>Converted Text:</h2>
+      <div class="translate-options">
+        <select id="languageSelector">
+          <option value="ta">Tamil</option>
+          <option value="hi">Hindi</option>
+        </select>
+        <button onclick="translateText()">Translate</button>
+      </div>
+      <p id="convertedText">{{ text }}</p>
+      <div id="translatedText"></div>
+    </div>
+    {% endif %}
+
+    <div id="footer">
+      <p>Developed By <a href="">Manikandan</a></p>
+    </div>
+
+    <script>
+      function translateText() {
+        const text = document.getElementById("convertedText").innerText;
+        const language = document.getElementById("languageSelector").value;
+
+        fetch("/translate", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ text: text, language: language }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            document.getElementById("translatedText").innerText =
+              data.translated_text;
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+    </script>
+  </body>
+</html>
