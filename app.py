@@ -23,7 +23,7 @@ def convert():
 
 def extract_text_from_image(image_file):
     img = Image.open(image_file)
-    pytesseract.pytesseract.tesseract_cmd =r'C:\Users\MANIKANDAN\AppData\Local\Programs\Tesseract-OCR\tesseract.exe'
+    pytesseract.pytesseract.tesseract_cmd =r'C:\Users\Programs\Tesseract-OCR\tesseract.exe'
     text = pytesseract.image_to_string(img)
     text = pytesseract.image_to_string(img)
     return text
